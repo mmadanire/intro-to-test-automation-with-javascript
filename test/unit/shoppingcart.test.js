@@ -30,25 +30,49 @@ describe('ShoppingCart', () => {
 	const socks = new Product("SOCKS", "Crew socks", 500);
 	const discountSocks = new Product("CHEAPSOCKS", "Cheap crew socks", 500, 300);
 
-	describe('...', () => {
+	describe('empty cart', () => {
 
 		const cart = new ShoppingCart(freeShippingQuoteService);
 		cart.updateShipping(shippingInfo);
+		const purchase = cart.toPurchase();
 
-		it('should ...', () => {
-
+		it('should be contain no items', () => {
+			assert.equal(purchase.items.length, 0)
 		});
+		it('should produce an empty object', () => {
+			const purchase = cart.toPurchase();
+			assert.equal(purchase.items.length, 0);
+			assert.equal(purchase.totalPrice, 0);
+			assert.equal(purchase.totalDiscount, 0);
+		});
+
 	});
+});
 
-	describe('...', () => {
+describe('PromoCodes', () => {
 
-		const cart = new ShoppingCart(freeShippingQuoteService);
+	const shippingInfo = new Shipping.ShippingInfo(
+		Shipping.ShippingService.USPSPriorityMail,
+		"30 W 21st Street, New York, NY 10010"
+	);
+	const freeShippingQuoteService = new FixedShippingQuoteService(0);
+	const shirt = new Product("SHIRT", "Shirt", 2500);
+	const socks = new Product("SOCKS", "Crew socks", 500);
+	const discountSocks = new Product("CHEAPSOCKS", "Cheap crew socks", 500, 300);
+
+	describe('FIRSTTIME', () => {
+		const shipping = 500; // fixed $5 shipping free
+		const freeShippingQuoteService = new FixedShippingQuoteService(shipping);
+		const cart = new ShoppingCart(freeShippingQuoteService)
+		cart.updateShipping(shippingInfo);
 		cart.addProduct(shirt);
-		cart.updateShipping(shippingInfo);
+		cart.addProduct(socks);
+		cart.addPromoCode("FIRSTTIME");
+		const purchase = cart.toPurchase();
 
-		it('should ...', () => {
-
+		it('should apply 10% off entire purchase excluding shipping', () => {
+			assert.equal(purchase.totalPrice, ((shirt.price + socks.price) * 0.9) + shipping)
 		});
-	});
 
+	});
 });

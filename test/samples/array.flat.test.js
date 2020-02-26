@@ -1,6 +1,6 @@
 
 var assert = require('assert'); // using Node.js's built-in 'assert' library
-
+// Other libraries Jasmin, mocha
 // A `describe` block defines a logical collection of specifications related to
 // the named concept. In this case, we're describing an "Array", referring to
 // the built-in JavaScript type:
