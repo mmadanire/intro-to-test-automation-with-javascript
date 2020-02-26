@@ -1,5 +1,7 @@
 var assert = require('chai').assert;
 
+// see sample at https://github.com/mmadanire/intro-to-test-automation-with-javascript/blob/sample/test/unit/shoppingcart.test.js
+
 import { ShoppingCart, Product, LineItem, Shipping } from '../../src/domain';
 
 /**
