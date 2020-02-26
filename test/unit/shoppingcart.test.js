@@ -73,6 +73,15 @@ describe('PromoCodes', () => {
 		it('should apply 10% off entire purchase excluding shipping', () => {
 			assert.equal(purchase.totalPrice, ((shirt.price + socks.price) * 0.9) + shipping)
 		});
+		it('should show the 10% discount on each line item', () => {
+			const lineItemForShirt = purchase.items.find(item => item.sku == shirt.sku);
+			assert.approximately(lineItemForShirt.totalPrice, shirt.price * 0.9, 0.001)
+			assert.approximately(lineItemForShirt.totalDiscount, shirt.price * 0.1, 0.001)
+			
+			const lineItemForSocks = purchase.items.find(item => item.sku == socks.sku)
+			assert.approximately(lineItemForSocks.totalPrice, socks.price * 0.9, 0.001)
+			assert.approximately(lineItemForSocks.totalDiscount, socks.price * 0.1, 0.001)
+		});
 
 	});
 });
